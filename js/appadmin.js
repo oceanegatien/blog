@@ -29,10 +29,8 @@ $( document ).ready(function() {
        		}
     	}).done(function(retour){
     		console.log(retour);
-    		if (retour == ok) {
-    			alert("ok");
-    		}else{
-    			alert("ko");
+    		if (retour === "ko") {
+    			alert("Désolé, problème de serveur! Réessayer");
     		}
     	});		
 
@@ -47,7 +45,7 @@ $( document ).ready(function() {
 		var jour = maintenant.getDate();
 		var mois = maintenant.getMonth()+1;
 		var an = maintenant.getFullYear();
-		return jour+"/"+mois+"/"+an;
+		return jour+"."+mois+"."+an;
 	
 
 

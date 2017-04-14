@@ -1,10 +1,18 @@
 $( document ).ready(function() {
 	var blog = {};
 	RecupereDonneesAjax();
-	//console.log(data);
-	affichageData();
 
-	//del();
+	afficherData();
+
+
+
+	$('#erase').click(function() {
+		del();
+	});
+
+
+
+
 
 	function del() {
 	
@@ -14,7 +22,33 @@ $( document ).ready(function() {
 				task: 'delete',
 				key: 'articleblogoceane'
 			}
-		});
+		}).done();
+	}
+
+
+
+
+	function afficherData() {
+			if ( blog.length == 0|| blog == null || blog == undefined) {
+				alert("blog vide");
+			}else{
+				for (var i = 0; i < blog.length; i++) {
+					console.log( blog[i] );
+					$("#listeTitreArticles").append('<h4 class="selecTitre" value="'+i+'"><a class="list-group-item text-center">'+blog[i].titre+'</h4></a>');
+				}
+
+				$('.selecTitre').click(function () {
+					$('#afficherContenu').html("");
+					var a = $(this).attr('value');
+					console.log(blog[a]);
+					var articleEnCours = blog[a];
+					console.log(articleEnCours);
+					$('#afficherContenu').append('<h4>'+articleEnCours.titre+'</h4>');
+					$('#afficherContenu').append('<p>'+articleEnCours.contenu+'</p>');
+					$('#afficherContenu').append('<div>'+articleEnCours.date+'</div>');
+		
+				});
+			}
 	}
 
 
@@ -31,26 +65,19 @@ $( document ).ready(function() {
 			}
 		}).done(function (data) {
 			blog = JSON.parse(data);
-			console.log(data);
-			console.log(blog);
-			return blog;
+			afficherData();
 		}).fail(function() {
-			alert('error');
+			alert('server error');
 		}).always(function() {
 			console.log('complete');
 		});
 	}
 
 
-	function affichageData () {
-		for (var i = 0; i < blog.length ; i++) {
-			var obj = blog[i];
-			console.log(obj.titre);
-			$("#affichageArticle").append('<li class="list-group-item"><h1>'+obj.titre+'</h1></li>');
-		}
 
 
-	}
 
 
 });
+
+
