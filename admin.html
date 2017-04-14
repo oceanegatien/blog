@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Mon blog</title>
+	<title>Créer un article</title>
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
@@ -12,24 +12,47 @@
 	<script src="js/appadmin.js"></script>
 </head>
 <body>
-	<header>
-		
 
+
+	<header class="header container navbar-header">
+
+		<ul class="nav nav-pills navbar-brand collapse navbar-collapse">
+			<li role="presentation" class="collapse navbar-collapse active"><a href="blog.html">Mon blog</a></li>
+		</ul>
 
 	</header>
 
-	<main>
+	<main class="container">
 		
+		<div class="row center-block">
+ 			<div class="form-group well">
 
+    			<label for="inputTitreArticle">Titre de l'article</label>
+    			<input type="text" class="form-control form-control-lg" id="inputTitreArticle" placeholder="Titre" value="">
+
+  			</div>
+  		</div>
+
+
+  		<div>
+			<div class="center-block well">
+
+        		<textarea class="form-control" id="contenuArticle" name="text" placeholder="Taper votre message" rows="5" value=""></textarea>
+        		<button id="send" class="btn btn-info">Envoyer</button>
+
+			</div>
+		</div>
 
 	</main>
 
-	<footer>
-		
 
-		
-	</footer>
+
 
 
 </body>
 </html>
+
+
+
+
+
