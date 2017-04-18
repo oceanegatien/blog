@@ -6,20 +6,22 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 
-
+	<script src="node_modules/md2html/node_modules/markdown/lib/markdown.js"></script>
 	<script src="node_modules/jquery/dist/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="js/appadmin.js"></script>
 </head>
+
+
 <body>
 
 
 	<header class="header container navbar-header">
-
-		<ul class="nav nav-pills navbar-brand collapse navbar-collapse">
-			<li role="presentation" class="collapse navbar-collapse active"><a href="blog.html">Mon blog</a></li>
-		</ul>
-
+		<div>
+			<ul class="nav nav-pills navbar-brand collapse navbar-collapse">
+				<li role="presentation" class="collapse navbar-collapse active"><a href="blog.html">Mon blog</a></li>
+			</ul>
+		</div>
 	</header>
 
 	<main class="container">
@@ -27,23 +29,30 @@
 		<div class="row center-block">
  			<div class="form-group well">
 
-    			<label for="inputTitreArticle">Titre de l'article</label>
-    			<input type="text" class="form-control form-control-lg" id="inputTitreArticle" placeholder="Titre" value="">
-
+				<input id="titre" type="text" name="titre" placeholder="Votre titre">
+    			<textarea class="form-control" id="textInput" rows="3" cols="3" placeholder="Votre article"></textarea>
+    			<div id="preview"> </div>
   			</div>
   		</div>
 
 
   		<div>
-			<div class="center-block well">
+			<div class="text-right">
 
-        		<textarea class="form-control" id="contenuArticle" name="text" placeholder="Taper votre message" rows="5" value=""></textarea>
         		<button id="send" class="btn btn-info">Envoyer</button>
 
 			</div>
 		</div>
 
 	</main>
+
+
+	<footer>
+		<div id="listeTitreArticles">
+		</div>
+			<div id="afficherContenu"></div>
+
+	</footer>
 
 
 
