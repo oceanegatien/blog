@@ -5,7 +5,6 @@ $( document ).ready(function() {
 	var monCommentaire = {};
 	var commentaireListe={};
 	ajaxGetDonneesCommentaires();
-	$('#afficherContenu').html(blog);
 
 
 	$('#sendCommentaire').on('click', function() {
@@ -46,9 +45,7 @@ $( document ).ready(function() {
 				alert('Désolé, ca chie');
 				return;
 			}
-			//console.log(data);
 			blog = JSON.parse(data);
-			//console.log(data);
 			afficherArticles();
 		}).fail(function(e) {
 			alert('server error');
@@ -62,6 +59,9 @@ $( document ).ready(function() {
 			if ( blog.length == 0|| blog == null || blog == undefined) {
 				alert("blog vide");
 			}else{
+				$('#afficherContenu').append('<h4>'+blog[0].titre+'</h4>');
+				$('#afficherContenu').append('<p>'+blog[0].contenu+'</p>');
+				$('#afficherContenu').append('<div>'+blog[0].date+'</div>');
 				console.log(blog);
 				for (var i = 0; i < blog.length; i++) {
 					//console.log( blog[i] );
@@ -71,9 +71,7 @@ $( document ).ready(function() {
 				$('.selecTitre').click(function () {
 					$('#afficherContenu').html("");
 					var a = $(this).attr('value');
-					//console.log(blog[a]);
 					var articleEnCours = blog[a];
-					//console.log(articleEnCours);
 					$('#afficherContenu').append('<h4>'+articleEnCours.titre+'</h4>');
 					$('#afficherContenu').append('<p>'+articleEnCours.contenu+'</p>');
 					$('#afficherContenu').append('<div>'+articleEnCours.date+'</div>');

@@ -4,7 +4,7 @@
 	commentaireListe = {};
 	RecupereDonneesAjaxGet();
 	ajaxGetCommentaires();
-	$('#afficherContenu').html(monArticle);
+	
 
 
 
