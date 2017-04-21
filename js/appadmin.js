@@ -1,9 +1,10 @@
 	var monArticle;
 	var blog = {};
 	var id;
+	commentaireListe = {};
 	RecupereDonneesAjaxGet();
-
-
+	ajaxGetCommentaires();
+	$('#afficherContenu').html(monArticle);
 
 
 
@@ -31,11 +32,18 @@
 	//-- bouton supprimer pour supp un article
 	$('body main div').delegate('.trashBtn', 'click', function() {
 		id = $(this).data("id");
-		deleteAjax();
+		deleteAjaxArticles();
 		RecupereDonneesAjaxGet();
 
 	});
 
+	//--bouton pour supprimer un commentaire
+	$('body footer ul').delegate('.trashBtn', 'click', function() {
+		id = $(this).data("id");
+		deleteAjaxCommentaires();
+		ajaxGetCommentaires();
+
+	});
 
 	//--bouton modifié article
 	$('body main').delegate('.modifBtn', 'click', function() {
@@ -140,12 +148,12 @@
 	function afficherData() {
 		$('#listeTitreArticles').html("");
 		for (var i = 0; i < blog.length; i++) {
-			$("#listeTitreArticles").append(' <a class="collection-item selecTitre" data-id="'+blog[i]._id+'" value="'+i+'"> '+blog[i].titre+' // '+blog[i].date+' <a class="btn-floating orange"><i class="material-icons modifBtn" data-id="'+blog[i]._id+'">mode_edit</i></a>  <a class="btn-floating red"><i class="material-icons trashBtn" data-id="'+blog[i]._id+'">delete</i></a></a>');
+			$("#listeTitreArticles").append('<a class="collection-item selecTitre" data-id="'+blog[i]._id+'" value="'+i+'"> '+blog[i].titre+' // '+blog[i].date+' <a class="btn-floating orange"><i class="material-icons modifBtn" data-id="'+blog[i]._id+'">mode_edit</i></a> Editer <a class="btn-floating red"><i class="material-icons trashBtn" data-id="'+blog[i]._id+'">delete</i></a></a>Supprimer');
 		}
 	}
 
 
-	function deleteAjax() {
+	function deleteAjaxArticles() {
 		$.ajax({
 				url:'http://192.168.1.50/json-db',
 				data: {
@@ -161,4 +169,43 @@
 	}
 
 
+	function deleteAjaxCommentaires() {
+		$.ajax({
+				url:'http://192.168.1.50/json-db',
+				data: {
+					task: 'delete',
+					key: 'commentairesblogoceane',
+					_id: id,
+				}
+		}).done(function(retour) {
+			if (retour === "ko") {
+    			alert("Désolé, problème de serveur! Réessayer");
+    		}
+		});
+	}
 
+
+	function ajaxGetCommentaires() {
+	
+		$.ajax({
+			url:'http://192.168.1.50/json-db',
+			data: {
+			task: 'get',
+			key: 'commentairesblogoceane'
+			}
+		}).done(function (datacommentaires) {
+			commentaireListe = JSON.parse(datacommentaires);
+			afficherDataCommentaires();
+		}).fail(function() {
+			alert('loading error');
+		});
+	}
+
+
+	function afficherDataCommentaires() {
+		$('#listeCommentaires').html("");
+		console.log(commentaireListe);
+		for (var i = 0; i < commentaireListe.length; i++) {
+			$('#listeCommentaires').append('<li class="collection-item avatar"><span class="title">'+commentaireListe[i].commentaire+'</span><small><p>'+commentaireListe[i].pseudo+'<br>'+commentaireListe[i].date+'</p><a href="#!" class="secondary-content"><i data-id="'+commentaireListe[i]._id+'" class="material-icons trashBtn">delete</i></small></a></li>');
+		}
+	}

@@ -1,11 +1,18 @@
 $( document ).ready(function() {
 	$(".dropdown-button").dropdown();
 	var blog = {};
-	RecupereDonneesAjax();
-	afficherData();
+	RecupereDonneesArticles();
+	var monCommentaire = {};
+	var commentaireListe={};
+	ajaxGetDonneesCommentaires();
+	$('#afficherContenu').html(blog);
 
 
-
+	$('#sendCommentaire').on('click', function() {
+		requeteSetCommentaires();
+		$('#pseudo').val("");
+		$('#commentaire').val("");
+	});
 	
 
 
@@ -25,35 +32,7 @@ $( document ).ready(function() {
 
 
 
-
-	function afficherData() {
-			if ( blog.length == 0|| blog == null || blog == undefined) {
-				alert("blog vide");
-			}else{
-				for (var i = 0; i < blog.length; i++) {
-					console.log( blog[i] );
-					$("#listeTitreArticles").append('<li class="collection-item"><div class="selecTitre" value="'+i+'">'+blog[i].titre+'<a href="#!" class="secondary-content"><i class="material-icons">send</i></a></div></li>');
-				}
-
-				$('.selecTitre').click(function () {
-					$('#afficherContenu').html("");
-					var a = $(this).attr('value');
-					console.log(blog[a]);
-					var articleEnCours = blog[a];
-					console.log(articleEnCours);
-					$('#afficherContenu').append('<h4>'+articleEnCours.titre+'</h4>');
-					$('#afficherContenu').append('<p>'+articleEnCours.contenu+'</p>');
-					$('#afficherContenu').append('<div>'+articleEnCours.date+'</div>');
-		
-				});
-			}
-	}
-
-
-
-
-
-	function RecupereDonneesAjax() {
+	function RecupereDonneesArticles() {
 	
 		$.ajax({
 			url:'http://192.168.1.50/json-db',
@@ -67,9 +46,10 @@ $( document ).ready(function() {
 				alert('Désolé, ca chie');
 				return;
 			}
-			console.log(data);
+			//console.log(data);
 			blog = JSON.parse(data);
-			afficherData();
+			//console.log(data);
+			afficherArticles();
 		}).fail(function(e) {
 			alert('server error');
 			console.log(e);
@@ -78,11 +58,91 @@ $( document ).ready(function() {
 		});
 	}
 
+	function afficherArticles() {
+			if ( blog.length == 0|| blog == null || blog == undefined) {
+				alert("blog vide");
+			}else{
+				console.log(blog);
+				for (var i = 0; i < blog.length; i++) {
+					//console.log( blog[i] );
+					$("#listeTitreArticles").append('<li class="collection-item"><div class="selecTitre" value="'+i+'">'+blog[i].titre+'<a href="#!" class="secondary-content"><i class="material-icons">send</i></a></div></li>');
+				}
+
+				$('.selecTitre').click(function () {
+					$('#afficherContenu').html("");
+					var a = $(this).attr('value');
+					//console.log(blog[a]);
+					var articleEnCours = blog[a];
+					//console.log(articleEnCours);
+					$('#afficherContenu').append('<h4>'+articleEnCours.titre+'</h4>');
+					$('#afficherContenu').append('<p>'+articleEnCours.contenu+'</p>');
+					$('#afficherContenu').append('<div>'+articleEnCours.date+'</div>');
+					
+				});
+			}
+	}
 
 
 
 
 
+
+
+	function datePublication() {
+	
+		var maintenant=new Date();
+		var jour = maintenant.getDate();
+		var mois = maintenant.getMonth()+1;
+		var an = maintenant.getFullYear();
+		return jour+"."+mois+"."+an;
+	}
+
+	function requeteSetCommentaires() {
+    	monCommentaire = {"pseudo": $('#pseudo').val(), "commentaire": $('#commentaire').val(), "date": datePublication()}
+    	console.log( monCommentaire );
+	
+		$.ajax({
+      		url : "http://192.168.1.50/json-db",
+       		data : {
+       			task : "set",
+       			key: "commentairesblogoceane",
+       			value: JSON.stringify(monCommentaire)
+       		}
+    	}).done(function(retour){
+    		ajaxGetDonneesCommentaires();
+    		if (retour === "ko") {
+    			alert("Désolé, problème de serveur! Réessayer");
+    		}
+    	});		
+
+	}
+
+
+	function ajaxGetDonneesCommentaires() {
+	
+		$.ajax({
+			url:'http://192.168.1.50/json-db',
+			data: {
+			task: 'get',
+			key: 'commentairesblogoceane'
+			}
+		}).done(function (datacommentaires) {
+			commentaireListe = JSON.parse(datacommentaires);
+			afficherDataCommentaires();
+		}).fail(function() {
+			alert('loading error');
+		});
+	}
+
+
+
+	function afficherDataCommentaires() {
+		$('#afficherCommentaires').html("");
+		
+		for (var i = 0; i < commentaireListe.length; i++) {
+			$('#afficherCommentaires').append('<blockquote>'+commentaireListe[i].commentaire+'<br><small>'+commentaireListe[i].pseudo+" - "+commentaireListe[i].date+'</small></blockquote>');
+		}
+	}
 });
 
 
