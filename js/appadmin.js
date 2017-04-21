@@ -1,20 +1,20 @@
-$( document ).ready(function() {
 	var monArticle;
 	var blog = {};
+	var id;
 	RecupereDonneesAjaxGet();
-	afficherData();
+
 
 
 
 
 	//-- Ajout
 
-	$("#send").on('click', function() {
+	$("main div #send").click(function() {
 		monArticle = {"titre": $("#titre").val(), "contenu": $("#textInput").val(), "date": datePublication() };
-		requeteAjaxSet();
 		$("#textInput").val("");
 		$("#titre").val("");
 		$('#preview').html("");
+		requeteAjaxSet();
 	});
 
 
@@ -29,26 +29,54 @@ $( document ).ready(function() {
       
 
 	//-- bouton supprimer pour supp un article
-	$('body footer').delegate('.trashBtn', 'click', function() {
+	$('body main div').delegate('.trashBtn', 'click', function() {
+		id = $(this).data("id");
+		deleteAjax();
+		RecupereDonneesAjaxGet();
+
+	});
+
+
+	//--bouton modifié article
+	$('body main').delegate('.modifBtn', 'click', function() {
+		var content =  $('#afficherContenu').val();
 		var id = $(this).data("id");
-		console.log(id);
+		var titre;
+		var date;
+		for (var i = 0; i < blog.length; i++) {
+			if(id === blog[i]._id){
+				titre = blog[i].titre;
+				date = blog[i].date;
+			}
+		}
+
+		monArticle = {"titre": titre , "contenu":content , "date": date, "_id": id};
 
 		$.ajax({
 			url:'http://192.168.1.50/json-db',
 			data: {
-				task: 'delete',
+				task: 'update',
 				key: 'articleblogoceane',
-				_id: id
+				_id: id,
+				value: JSON.stringify(monArticle),
 			}
-		}).done(console.log('gg'));
+		}).done(function(retour) {
+			window.location.reload()
+			if (retour === "ko") {
+    			alert("Désolé, problème de serveur! Réessayer");
+    		}
+		});
 	});
 
 
 
-
-
-
-
+//fonction pour afficher contenu article lors du clic sur un titre
+	$('#listeTitreArticles').delegate('.selecTitre','click', function () {
+		$('#afficherContenu').html("");
+		var a = $(this).attr('value');
+		var articleEnCours = blog[a];
+		$('#afficherContenu').append(articleEnCours.contenu);		
+	});
 
 
 
@@ -67,6 +95,7 @@ $( document ).ready(function() {
        			value: JSON.stringify(monArticle)
        		}
     	}).done(function(retour){
+    		RecupereDonneesAjaxGet();
     		console.log(retour);
     		if (retour === "ko") {
     			alert("Désolé, problème de serveur! Réessayer");
@@ -102,51 +131,34 @@ $( document ).ready(function() {
 			blog = JSON.parse(data);
 			afficherData();
 		}).fail(function() {
-			alert('server error');
-		}).always(function() {
-			console.log('complete');
+			alert('loading error');
 		});
 	}
 
 
 
 	function afficherData() {
-			if ( blog.length == 0|| blog == null || blog == undefined) {
-				alert("blog vide");
-			}else{
-				for (var i = 0; i < blog.length; i++) {
-					$("#listeTitreArticles").append('<h4 class="selecTitre" id="id'+i+'" value="'+i+'">\
-						<a class="list-group-item text-center">'+blog[i].titre+'	\
-						<button class="glyphicon glyphicon-trash btn-danger trashBtn" data-id="'+blog[i]._id+'"></button>\
-						<button class="glyphicon glyphicon-pencil btn-warning"></button></h4></a>');
-				}
-			$('.selecTitre').click(function () {
-					$('#afficherContenu').html("");
-					var a = $(this).attr('value');
-
-					var articleEnCours = blog[a];
-					$('#afficherContenu').append('<h4>'+articleEnCours.titre+'</h4>');
-					$('#afficherContenu').append('<p>'+articleEnCours.contenu+'</p>');
-					$('#afficherContenu').append('<div>'+articleEnCours.date+'</div>');
-		
-				});
-			}
+		$('#listeTitreArticles').html("");
+		for (var i = 0; i < blog.length; i++) {
+			$("#listeTitreArticles").append(' <a class="collection-item selecTitre" data-id="'+blog[i]._id+'" value="'+i+'"> '+blog[i].titre+' // '+blog[i].date+' <a class="btn-floating orange"><i class="material-icons modifBtn" data-id="'+blog[i]._id+'">mode_edit</i></a>  <a class="btn-floating red"><i class="material-icons trashBtn" data-id="'+blog[i]._id+'">delete</i></a></a>');
+		}
 	}
 
 
-	// function del() {
-	// 	$.ajax({
-	// 		url:'http://192.168.1.50/json-db',
-	// 		data: {
-	// 			task: 'delete',
-	// 			key: 'articleblogoceane',
-	// 			_id: "idArticle"
-	// 		}
-	// 	}).done(console.log('gg'));
-	// }
+	function deleteAjax() {
+		$.ajax({
+				url:'http://192.168.1.50/json-db',
+				data: {
+					task: 'delete',
+					key: 'articleblogoceane',
+					_id: id,
+				}
+		}).done(function(retour) {
+			if (retour === "ko") {
+    			alert("Désolé, problème de serveur! Réessayer");
+    		}
+		});
+	}
 
-
-	
-});
 
 

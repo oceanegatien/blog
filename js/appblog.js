@@ -1,13 +1,12 @@
 $( document ).ready(function() {
+	$(".dropdown-button").dropdown();
 	var blog = {};
 	RecupereDonneesAjax();
 	afficherData();
 
 
 
-	$('#erase').click(function() {
-		del();
-	});
+	
 
 
 
@@ -33,7 +32,7 @@ $( document ).ready(function() {
 			}else{
 				for (var i = 0; i < blog.length; i++) {
 					console.log( blog[i] );
-					$("#listeTitreArticles").append('<h4 class="selecTitre" value="'+i+'"><a class="list-group-item text-center">'+blog[i].titre+'</h4></a>');
+					$("#listeTitreArticles").append('<li class="collection-item"><div class="selecTitre" value="'+i+'">'+blog[i].titre+'<a href="#!" class="secondary-content"><i class="material-icons">send</i></a></div></li>');
 				}
 
 				$('.selecTitre').click(function () {
@@ -63,11 +62,18 @@ $( document ).ready(function() {
 			key: 'articleblogoceane'
 			}
 		}).done(function (data) {
+
+			if(data=='ko'){
+				alert('Désolé, ca chie');
+				return;
+			}
+			console.log(data);
 			blog = JSON.parse(data);
 			afficherData();
-		}).fail(function() {
+		}).fail(function(e) {
 			alert('server error');
-		}).always(function() {
+			console.log(e);
+		}).always(function(e) {
 			console.log('complete');
 		});
 	}

@@ -3,25 +3,25 @@
 <head>
 	<title>Créer un article</title>
 	<meta charset="utf-8" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="node_modules/materialize-css/dist/css/materialize.min.css"  media="screen,projection"/>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-	<script src="node_modules/md2html/node_modules/markdown/lib/markdown.js"></script>
-	<script src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="js/appadmin.js"></script>
 </head>
 
-
+<!--
 <body>
 
 
-	<header class="header container navbar-header">
-		<div>
-			<ul class="nav nav-pills navbar-brand collapse navbar-collapse">
-				<li role="presentation" class="collapse navbar-collapse active"><a href="blog.html">Mon blog</a></li>
+	<header class="header container">
+	<nav class="navbar nav navbar-brand nav-pills bg-faded navbar-light navbar-toggleable-md">
+		<div class="navbar-nav mr-auto">
+			<ul class="nav-item active">
+				<li role="presentation" class="collapse navbar-collapse active nav-link"><a href="blog.html">Mon blog</a></li>
 			</ul>
 		</div>
+	</nav>	
 	</header>
 
 	<main class="container">
@@ -29,7 +29,7 @@
 		<div class="row center-block">
  			<div class="form-group well">
 
-				<input id="titre" type="text" name="titre" placeholder="Votre titre">
+				<input id="titre" type="text" name="titre" rows="3" placeholder="Votre titre">
     			<textarea class="form-control" id="textInput" rows="3" cols="3" placeholder="Votre article"></textarea>
     			<div id="preview"> </div>
   			</div>
@@ -59,8 +59,91 @@
 
 
 </body>
-</html>
+-->
 
+<body>
+
+	<header>
+		<nav>
+	    	<div class="nav-wrapper">
+	     		<a href="#!" class="brand-logo center">Blog</a>
+	    		<ul class="left hide-on-med-and-down">
+	        		<li><a href="blog.html">Blog</a></li>
+	        		<li class="active"><a href="admin.html">Admin</a></li>
+	      		</ul>
+	    	</div>
+	  	</nav>
+	</header>
+	
+
+
+	<main class="container">
+
+		<div class="row">
+      		<div class="col s8">
+
+        		<div class="row">
+          			<div class="input-field col s12">
+            			<input id="titre" type="text">
+            			<label for="titre">Titre</label>
+          			</div>
+        		</div>
+
+        		<div class="row">
+          			<div class="input-field col s12">
+            			<label for="textInput">Votre article</label>
+            			<textarea id="textInput" class="materialize-textarea"></textarea>
+          			</div>
+					<button id="send" class="btn waves-effect waves-light">Envoyé</button>
+        		</div>
+			</div>
+
+          	<div class="col s4">
+          		<div>
+          			<div id="preview" class="col s12"></div>
+          		</div>
+          	</div>
+      	
+
+
+
+
+
+    <div class="container">
+		<div class="row">
+			<div class="col s12">
+				<div class="collection col s4" id="listeTitreArticles">
+	        
+	      		</div>
+
+	      		<div class="col s8">
+	        		<div class="input-field">
+						<i class="material-icons prefix">mode_edit</i>
+						<textarea id="afficherContenu" class="materialize-textarea"></textarea>
+	       			</div>
+	    		</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+	</main>
+
+
+
+
+
+
+	<script src="node_modules/md2html/node_modules/markdown/lib/markdown.js"></script>
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="node_modules/materialize-css/dist/js/materialize.min.js"></script>
+	<script src="js/appadmin.js"></script>
+</body>
+
+
+</html>
 
 
 
